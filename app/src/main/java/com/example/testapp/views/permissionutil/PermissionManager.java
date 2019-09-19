@@ -33,7 +33,7 @@ import java.util.List;
 public class PermissionManager {
 
     public static final int RUNTIME_PERMISSION = 23;
-    private static AlertDialog dialog;
+    public static AlertDialog dialog;
 
     // Callbacks to present result to requested activity/fragment
     public interface PermissionListener {
@@ -311,6 +311,7 @@ public class PermissionManager {
                 .setPositiveButton("go to setting", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         openSetting(object);
 
                     }
@@ -338,13 +339,18 @@ public class PermissionManager {
      * @since : 1.0.0
      */
     private static void openSetting(final Object object) {
-        final Intent i = new Intent();
-        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + getActivity(object).getPackageName()));
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        getActivity(object).startActivityForResult(i, 1);
+//        final Intent i = new Intent();
+//        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//        i.addCategory(Intent.CATEGORY_DEFAULT);
+//        i.setData(Uri.parse("package:" + getActivity(object).getPackageName()));
+//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//        getActivity(object).startActivityForResult(i, RUNTIME_PERMISSION);
+
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", (getActivity(object).getPackageName()), null);
+        intent.setData(uri);
+        getActivity(object).startActivityForResult(intent, RUNTIME_PERMISSION);
     }
 }

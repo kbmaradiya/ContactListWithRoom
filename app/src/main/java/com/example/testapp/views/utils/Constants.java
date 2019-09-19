@@ -1,14 +1,33 @@
 package com.example.testapp.views.utils;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.testapp.R;
+
 public class Constants {
 
     public static final String NAME="name";
-    public static final String CONTACT_NUMBER="contact_number";
-    public static final String IMAGE_PATH="image_path";
+    public static final String CONTACT_NUMBER="contactNumber";
+    public static final String IMAGE_PATH="imagePath";
 
 
     public static final String TABLE_NAME="person";
     public static final String DATABASE_NAME="person_db";
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, String url) {
+        Glide.with(view.getContext())
+                .load(url)
+                .apply( new RequestOptions()
+                        .placeholder(R.drawable.ic_launcher_background)
+                )
+                .into(view);
+    }
+
 
 
 }

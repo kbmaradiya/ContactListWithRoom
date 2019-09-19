@@ -8,6 +8,8 @@ import com.example.testapp.views.utils.Constants;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
+
 @Dao
 public interface PersonDao {
 
@@ -15,5 +17,5 @@ public interface PersonDao {
     void insertPerson(List<Person> persons);
 
     @Query("SELECT * FROM " + Constants.TABLE_NAME)
-    List<Person> getAllPersons();
+    Maybe<List<Person>> getAllPersons();
 }

@@ -4,19 +4,33 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.testapp.views.room.Person;
 import com.example.testapp.views.room.PersonDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Maybe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityRepository {
 
-    public static void fetchAllContactsFromDevice(final Application application) {
+    public static void fetchAllContactsFromDevice(final Application application, MutableLiveData<Boolean> isDataAdded) {
         final List<Person> contacts = new ArrayList<>();
 
-        Cursor cursor = application.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor cursor = application.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
         if ((cursor != null ? cursor.getCount() : 0) > 0) {
             while (cursor.moveToNext()) {
@@ -34,18 +48,50 @@ public class MainActivityRepository {
             cursor.close();
         }
 
-        new Thread(new Runnable() {
+
+
+
+        Completable.fromAction(new Action() {
             @Override
-            public void run() {
+            public void run() throws Exception {
                 PersonDatabase.getInstance(application).personDao().insertPerson(contacts);
             }
-        }).start();
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.e("MainActivityRepository","onError");
+
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("MainActivityRepository","Data added");
+                isDataAdded.setValue(true);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("MainActivityRepository","onError "+ e.getMessage());
+
+            }
+        });
+
 
     }
 
 
-    public static List<Person> getAllPersonsFromDatabase(Application application) {
-        List<Person> personList=PersonDatabase.getInstance(application).personDao().getAllPersons();
-        return personList;
+    public static void getAllPersonsFromDatabase(Application application, MutableLiveData<List<Person>> personsList) {
+        PersonDatabase.getInstance(application).personDao().getAllPersons()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Person>>() {
+                    @Override
+                    public void accept(List<Person> personList) throws Exception {
+                        personsList.setValue(personList);
+                    }
+                });
+
+
     }
 }

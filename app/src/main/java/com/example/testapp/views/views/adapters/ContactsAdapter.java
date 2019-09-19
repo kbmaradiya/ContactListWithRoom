@@ -40,12 +40,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
         holder.contactAdapterBinding.setPerson(personList.get(position));
 
-        Glide.with(activity)
-                .load(personList.get(position).getImagePath())
-                .apply( new RequestOptions()
-                        .placeholder(R.drawable.ic_launcher_background)
-                        )
-                .into(holder.contactAdapterBinding.imgProfilePic);
+//        Glide.with(activity)
+//                .load("http://pngimg.com/uploads/google/google_PNG19640.png")
+//                .apply( new RequestOptions()
+//                        .placeholder(R.drawable.ic_launcher_background)
+//                        )
+//                .into(holder.contactAdapterBinding.imgProfilePic);
     }
 
     @Override

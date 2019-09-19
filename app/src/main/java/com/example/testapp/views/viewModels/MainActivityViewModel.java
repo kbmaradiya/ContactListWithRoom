@@ -15,6 +15,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private Application application;
     private MutableLiveData<List<Person>> personsList;
+    private MutableLiveData<Boolean> isDataAdded;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -29,11 +30,18 @@ public class MainActivityViewModel extends AndroidViewModel {
         return personsList;
     }
 
+    public MutableLiveData<Boolean> getIsDataAdded() {
+        if (isDataAdded==null){
+            isDataAdded=new MutableLiveData<>();
+        }
+        return isDataAdded;
+    }
+
     public void fetchContactsFromDevice(){
-        MainActivityRepository.fetchAllContactsFromDevice(application);
+        MainActivityRepository.fetchAllContactsFromDevice(application,getIsDataAdded());
     }
 
     public void getAllPersonsFromDatabase() {
-        personsList.postValue(MainActivityRepository.getAllPersonsFromDatabase(application));
+        MainActivityRepository.getAllPersonsFromDatabase(application,getPersonsList());
     }
 }

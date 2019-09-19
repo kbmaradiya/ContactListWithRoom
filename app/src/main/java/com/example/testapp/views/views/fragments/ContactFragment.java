@@ -29,8 +29,8 @@ public class ContactFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         super.onCreateView(inflater, container, savedInstanceState);
-         fragmentContactsBinding = DataBindingUtil.inflate(
+        super.onCreateView(inflater, container, savedInstanceState);
+        fragmentContactsBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_contacts, container, false);
         return fragmentContactsBinding.getRoot();
     }
@@ -42,33 +42,39 @@ public class ContactFragment extends Fragment {
 
         registerObserverForLiveData();
 
-        init();
 
-
+//        ArrayList<Person> personsList = new ArrayList<>();
+//        personsList.add(new Person("Krupa", "123456789", "https://www.atzcart.com//uploads//images//rate_app.jpg"));
+//        personsList.add(new Person("Krisha", "123456789", ""));
+//        personsList.add(new Person("Harvi", "123456789", ""));
+//
+//        contactsAdapter = new ContactsAdapter(getActivity(), personsList);
+//        fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//
+//        fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
 
     }
 
-    private void init() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
-            }
-        }).start();
-    }
+
 
     private void registerObserverForLiveData() {
 
-        MainActivity.mainActivityViewModel.getPersonsList().observe(this,personsList->{
+        MainActivity.mainActivityViewModel.getPersonsList().observe(this, personsList -> {
 
-            Log.e("MainActivity","size "+ personsList.size());
-            if (contactsAdapter==null){
-                contactsAdapter=new ContactsAdapter(getActivity(),personsList);
+            Log.e("MainActivity", "size " + personsList.size());
+            if (contactsAdapter == null) {
+                contactsAdapter = new ContactsAdapter(getActivity(), personsList);
                 fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                 fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
-            }else {
+            } else {
                 contactsAdapter.notifyDataSetChanged();
+            }
+        });
+
+        MainActivity.mainActivityViewModel.getIsDataAdded().observe(this, isDataAdded->{
+            if (isDataAdded){
+                MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
             }
         });
     }
