@@ -10,6 +10,7 @@ import com.example.testapp.R;
 
 public class Constants {
 
+
     public static final String NAME="name";
     public static final String CONTACT_NUMBER="contactNumber";
     public static final String IMAGE_PATH="imagePath";

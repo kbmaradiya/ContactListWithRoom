@@ -13,16 +13,18 @@ import androidx.room.PrimaryKey;
 
 import com.example.testapp.views.utils.Constants;
 
-@Entity(tableName = Constants.TABLE_NAME, indices = @Index(value = Constants.CONTACT_NUMBER, unique = true))
+@Entity(tableName = Constants.TABLE_NAME)
 public class Person {
 
 
+    @PrimaryKey(autoGenerate = true)
+    private long personId;
 
     @ColumnInfo(name = Constants.NAME)
     private String name;
 
-    @PrimaryKey
-    @NonNull
+
+    @ColumnInfo(name = Constants.CONTACT_NUMBER)
     private String contactNumber;
 
 
@@ -36,6 +38,13 @@ public class Person {
     }
 
 
+    public long getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(long personId) {
+        this.personId = personId;
+    }
 
     public String getName() {
         return name;
