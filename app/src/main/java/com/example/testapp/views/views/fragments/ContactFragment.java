@@ -33,7 +33,7 @@ public class ContactFragment extends Fragment {
         fragmentContactsBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_contacts, container, false);
 
-        Log.e("ContactFragment","onCreateView");
+
         return fragmentContactsBinding.getRoot();
     }
 
@@ -46,11 +46,14 @@ public class ContactFragment extends Fragment {
 
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("ContactFragment","onResume");
-        MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+
+        if (menuVisible) {
+            MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
+        }
 
     }
 
@@ -58,27 +61,22 @@ public class ContactFragment extends Fragment {
 
         MainActivity.mainActivityViewModel.getContactPersonsList().observe(this, personsList -> {
 
-            Log.e("ContactFragment", "size " + personsList.size());
+            Log.e("ContactFragment", personsList.hashCode() + "  " + personsList.size());
             if (contactsAdapter == null) {
-                contactsAdapter = new ContactsAdapter(getActivity(), personsList,MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.CONTACT);
+                contactsAdapter = new ContactsAdapter(getActivity(), personsList, MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.CONTACT);
                 fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
                 fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
             } else {
                 contactsAdapter.notifyDataSetChanged();
             }
         });
 
-        MainActivity.mainActivityViewModel.getIsDataAdded().observe(this, isDataAdded->{
-            if (isDataAdded){
-                MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
-            }
+
+        MainActivity.mainActivityViewModel.getDeleted().observe(this, person -> {
+            CommonUtils.deleteAlertDialog(getContext(), person, MainActivity.mainActivityViewModel.getContactPersonsList());
         });
 
 
-        MainActivity.mainActivityViewModel.getDeleted().observe(this, person->{
 
-            CommonUtils.deleteAlertDialog(getContext(),person,MainActivity.mainActivityViewModel.getContactPersonsList());
-        });
     }
 }

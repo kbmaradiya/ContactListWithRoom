@@ -45,15 +45,14 @@ public class DeletedFragment extends Fragment {
 
     }
 
-
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("DeletedFragment","onResume");
-
-        MainActivity.mainActivityViewModel.getDeletedPersonsFromDatabase(Constants.CONTACT_STATUS.DELETED.getStatus());
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        Log.e("DeletedFragment","setMenuVisibility : "+menuVisible);
+        if (menuVisible){
+            MainActivity.mainActivityViewModel.getDeletedPersonsFromDatabase(Constants.CONTACT_STATUS.DELETED.getStatus());
+        }
     }
-
 
     private void registerObserverForLiveData() {
 

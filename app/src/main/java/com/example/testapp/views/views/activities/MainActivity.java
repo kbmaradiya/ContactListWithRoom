@@ -23,7 +23,7 @@ import com.example.testapp.views.views.fragments.FavouritesFragment;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PermissionManager.PermissionListener {
+public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding activityMainBinding;
 
@@ -39,28 +39,9 @@ public class MainActivity extends AppCompatActivity implements PermissionManager
 
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
-
-        if (!PermissionManager.hasPermissions(this, Permissions.CONTACT)) {
-            PermissionManager.requestPermissions(this, this, "", Permissions.CONTACT);
-        } else {
-
-            Log.e("MainActivity", "has Permission");
-            mainActivityViewModel.fetchContactsFromDevice();
-        }
-
-//        setupViewPager();
-
-        setUpTabs();
+        setupViewPager();
 
     }
-
-    private void setUpTabs() {
-        activityMainBinding.tabLayout.addTab(activityMainBinding.tabLayout.newTab().setText(getString(R.string.contacts)),true);
-        activityMainBinding.tabLayout.addTab(activityMainBinding.tabLayout.newTab().setText(getString(R.string.favourites)));
-        activityMainBinding.tabLayout.addTab(activityMainBinding.tabLayout.newTab().setText(getString(R.string.deleted)));
-
-    }
-
 
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -68,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements PermissionManager
         adapter.addFragment(new FavouritesFragment(), getString(R.string.favourites));
         adapter.addFragment(new DeletedFragment(), getString(R.string.deleted));
         activityMainBinding.viewPager.setAdapter(adapter);
+        activityMainBinding.viewPager.setOffscreenPageLimit(0);
         activityMainBinding.tabLayout.setupWithViewPager(activityMainBinding.viewPager);
 
     }
@@ -79,53 +61,4 @@ public class MainActivity extends AppCompatActivity implements PermissionManager
 
     }
 
-    @Override
-    public void onPermissionsGranted(List<String> perms) {
-        Log.e("MainActivity", "onPermissionsGranted " + perms);
-        mainActivityViewModel.fetchContactsFromDevice();
-
-    }
-
-    @Override
-    public void onPermissionsDenied(List<String> perms) {
-
-        Log.e("MainActivity", "onPermissionsDenied " + perms);
-
-        PermissionManager.requestPermissions(this, this, "", perms.toArray(new String[0]));
-    }
-
-    @Override
-    public void onPermissionRequestRejected() {
-        Log.e("MainActivity", "onPermissionRequestRejected");
-    }
-
-    @Override
-    public void onPermissionNeverAsked(List<String> perms) {
-        Log.e("MainActivity", "onPermissionNeverAsked" + perms.toString());
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        Log.e("MainActivity", "onRequestPermissionsResult");
-        PermissionManager.onRequestPermissionsResult(this, this, requestCode, Permissions.CONTACT, grantResults);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PermissionManager.RUNTIME_PERMISSION) {
-            if (!PermissionManager.hasPermissions(this, Permissions.CONTACT)) {
-                PermissionManager.requestPermissions(this, this, "", Permissions.CONTACT);
-            } else {
-
-                Log.e("MainActivity", "has Permission");
-                mainActivityViewModel.fetchContactsFromDevice();
-            }
-        }
-    }
-}
+   }

@@ -2,6 +2,7 @@ package com.example.testapp.views.room;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -14,7 +15,7 @@ import io.reactivex.Maybe;
 @Dao
 public interface PersonDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPerson(List<Person> persons);
 
     @Update

@@ -14,6 +14,7 @@ import com.example.testapp.views.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -66,6 +67,7 @@ public class MainActivityRepository {
             @Override
             public void onError(Throwable e) {
                 Log.e("MainActivityRepository", "onError " + e.getMessage());
+                isDataAdded.setValue(false);
 
             }
         });
@@ -81,6 +83,8 @@ public class MainActivityRepository {
                 .subscribe(new Consumer<List<Person>>() {
                     @Override
                     public void accept(List<Person> personList) throws Exception {
+//                        Log.e("ContactFragmentrespos",  personsList.getValue().hashCode()+"  "+personsList.getValue().size());
+
                         personsList.setValue(personList);
                     }
                 });
@@ -118,9 +122,16 @@ public class MainActivityRepository {
 
                         if (person.getStatus().equals(Constants.CONTACT_STATUS.DELETED.getStatus())){
                             contactPersonsList.getValue().remove(person);
-                            contactPersonsList.setValue(contactPersonsList.getValue());
                             Log.e("MainActivityRepository","deleted");
+                        }else if (person.getStatus().equals(Constants.CONTACT_STATUS.FAVOURITE.getStatus())){
+
+                           int index=contactPersonsList.getValue().indexOf(person);
+
+                           contactPersonsList.getValue().get(index).setStatus(Constants.CONTACT_STATUS.FAVOURITE.getStatus());
+
                         }
+                        contactPersonsList.setValue(contactPersonsList.getValue());
+
                     }
 
                     @Override
