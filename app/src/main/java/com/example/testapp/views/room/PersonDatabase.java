@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.testapp.views.utils.Constants;
 
 
-@Database(entities = {Person.class}, version = 1)
+@Database(entities = {Person.class}, version = 1,exportSchema = false)
 public abstract class PersonDatabase extends RoomDatabase {
 
     private static PersonDatabase personDatabase;

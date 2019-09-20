@@ -11,13 +11,29 @@ import com.example.testapp.R;
 public class Constants {
 
 
+    public enum CONTACT_STATUS{
+        CONTACT("contact"),FAVOURITE("favourite"),DELETED("deleted");
+
+        private String status;
+
+        CONTACT_STATUS(String status) {
+            this.status = status;
+        }
+
+        public String getStatus() {
+            return status;
+        }}
+
+    public static final String DATABASE_NAME="person_db";
+    public static final String TABLE_NAME="person";
+
     public static final String NAME="name";
     public static final String CONTACT_NUMBER="contactNumber";
     public static final String IMAGE_PATH="imagePath";
+    public static final String STATUS="status";
 
 
-    public static final String TABLE_NAME="person";
-    public static final String DATABASE_NAME="person_db";
+
 
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, String url) {

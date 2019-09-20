@@ -1,7 +1,6 @@
 package com.example.testapp.views.repositories;
 
 import android.app.Application;
-import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -10,15 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.testapp.views.room.Person;
 import com.example.testapp.views.room.PersonDatabase;
+import com.example.testapp.views.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Maybe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -39,7 +36,7 @@ public class MainActivityRepository {
                 String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 String picUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
 
-                Person person= new Person(name,phoneNumber,picUri);
+                Person person = new Person(name, phoneNumber, picUri, Constants.CONTACT_STATUS.CONTACT.getStatus());
 
                 contacts.add(person);
             }
@@ -48,31 +45,26 @@ public class MainActivityRepository {
             cursor.close();
         }
 
-
-
-
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                PersonDatabase.getInstance(application).personDao().insertPerson(contacts);
-            }
+                PersonDatabase.getInstance(application).personDao().insertPerson(contacts);            }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e("MainActivityRepository","onError");
-
+                Log.e("MainActivityRepository", "onError");
             }
 
             @Override
             public void onComplete() {
-                Log.e("MainActivityRepository","Data added");
+                Log.e("MainActivityRepository", "Data added");
                 isDataAdded.setValue(true);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("MainActivityRepository","onError "+ e.getMessage());
+                Log.e("MainActivityRepository", "onError " + e.getMessage());
 
             }
         });
@@ -91,7 +83,46 @@ public class MainActivityRepository {
                         personsList.setValue(personList);
                     }
                 });
+    }
 
+    public static void getFavouritePersonsFromDatabase(Application application, MutableLiveData<List<Person>> personsList) {
+        PersonDatabase.getInstance(application).personDao().getAllFavouritePersons(Constants.CONTACT_STATUS.FAVOURITE.getStatus())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Person>>() {
+                    @Override
+                    public void accept(List<Person> personList) throws Exception {
+                        personsList.setValue(personList);
+                    }
+                });
+    }
+
+
+    public static void setPersonAsFavouriteOrDeleted(Application application, Person person) {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                PersonDatabase.getInstance(application).personDao().updatePerson(person);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
 
     }
+
 }

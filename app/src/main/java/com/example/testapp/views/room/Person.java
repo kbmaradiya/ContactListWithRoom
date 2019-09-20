@@ -1,14 +1,7 @@
 package com.example.testapp.views.room;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.ImageView;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.BindingAdapter;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.testapp.views.utils.Constants;
@@ -31,10 +24,25 @@ public class Person {
     @ColumnInfo(name = Constants.IMAGE_PATH)
     private String imagePath;
 
-    public Person(String name, String contactNumber, String imagePath) {
+    @ColumnInfo(name = Constants.STATUS)
+    private String status;
+
+
+
+    public Person(String name, String contactNumber, String imagePath,String status) {
         this.name = name;
         this.contactNumber = contactNumber;
         this.imagePath = imagePath;
+        this.status=status;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 

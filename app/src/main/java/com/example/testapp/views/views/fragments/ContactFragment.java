@@ -43,16 +43,6 @@ public class ContactFragment extends Fragment {
         registerObserverForLiveData();
 
 
-//        ArrayList<Person> personsList = new ArrayList<>();
-//        personsList.add(new Person("Krupa", "123456789", "https://www.atzcart.com//uploads//images//rate_app.jpg"));
-//        personsList.add(new Person("Krisha", "123456789", ""));
-//        personsList.add(new Person("Harvi", "123456789", ""));
-//
-//        contactsAdapter = new ContactsAdapter(getActivity(), personsList);
-//        fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//
-//        fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
-
     }
 
 

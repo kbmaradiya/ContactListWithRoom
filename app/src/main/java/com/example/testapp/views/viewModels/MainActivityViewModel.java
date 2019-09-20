@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.testapp.views.repositories.MainActivityRepository;
 import com.example.testapp.views.room.Person;
+import com.example.testapp.views.utils.Constants;
 
 import java.util.List;
 
@@ -44,4 +45,17 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void getAllPersonsFromDatabase() {
         MainActivityRepository.getAllPersonsFromDatabase(application,getPersonsList());
     }
+    public void getFavouritePersonsFromDatabase() {
+        MainActivityRepository.getFavouritePersonsFromDatabase(application,getPersonsList());
+    }
+
+    public void setPersonAsFavourite( Person person){
+        person.setStatus(Constants.CONTACT_STATUS.FAVOURITE.getStatus());
+        MainActivityRepository.setPersonAsFavouriteOrDeleted(application,person);
+    }
+    public void setPersonAsDeleted(Person person){
+        person.setStatus(Constants.CONTACT_STATUS.DELETED.getStatus());
+        MainActivityRepository.setPersonAsFavouriteOrDeleted(application,person);
+    }
 }
+
