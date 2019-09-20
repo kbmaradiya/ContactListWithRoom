@@ -1,6 +1,7 @@
 package com.example.testapp.views.repositories;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -74,7 +75,7 @@ public class MainActivityRepository {
 
 
     public static void getAllPersonsFromDatabase(Application application, MutableLiveData<List<Person>> personsList) {
-        PersonDatabase.getInstance(application).personDao().getAllPersons()
+        PersonDatabase.getInstance(application).personDao().getAllPersons(Constants.CONTACT_STATUS.FAVOURITE.getStatus(), Constants.CONTACT_STATUS.CONTACT.getStatus())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Person>>() {
@@ -85,20 +86,20 @@ public class MainActivityRepository {
                 });
     }
 
-    public static void getFavouritePersonsFromDatabase(Application application, MutableLiveData<List<Person>> personsList) {
-        PersonDatabase.getInstance(application).personDao().getAllFavouritePersons(Constants.CONTACT_STATUS.FAVOURITE.getStatus())
+    public static void getFavouriteOrDeletedPersonsFromDatabase(Application application, MutableLiveData<List<Person>> favouriteList, String status) {
+        PersonDatabase.getInstance(application).personDao().getFavouriteOrDeletedPersons(status)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Person>>() {
                     @Override
                     public void accept(List<Person> personList) throws Exception {
-                        personsList.setValue(personList);
+                        favouriteList.setValue(personList);
                     }
                 });
     }
 
 
-    public static void setPersonAsFavouriteOrDeleted(Application application, Person person) {
+    public static void setPersonAsFavouriteOrDeleted(Context application, Person person, MutableLiveData<List<Person>> contactPersonsList) {
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
@@ -115,6 +116,11 @@ public class MainActivityRepository {
                     @Override
                     public void onComplete() {
 
+                        if (person.getStatus().equals(Constants.CONTACT_STATUS.DELETED.getStatus())){
+                            contactPersonsList.getValue().remove(person);
+                            contactPersonsList.setValue(contactPersonsList.getValue());
+                            Log.e("MainActivityRepository","deleted");
+                        }
                     }
 
                     @Override

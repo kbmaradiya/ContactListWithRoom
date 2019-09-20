@@ -4,7 +4,7 @@
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+<!--        <import type="android.view.View"/>-->
         <variable
             name="person"
             type="com.example.testapp.views.room.Person" />

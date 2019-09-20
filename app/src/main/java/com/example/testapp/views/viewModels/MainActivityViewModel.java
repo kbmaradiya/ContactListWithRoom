@@ -1,6 +1,7 @@
 package com.example.testapp.views.viewModels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.testapp.views.repositories.MainActivityRepository;
 import com.example.testapp.views.room.Person;
+import com.example.testapp.views.utils.CommonUtils;
 import com.example.testapp.views.utils.Constants;
 
 import java.util.List;
@@ -15,8 +17,11 @@ import java.util.List;
 public class MainActivityViewModel extends AndroidViewModel {
 
     private Application application;
-    private MutableLiveData<List<Person>> personsList;
+    private MutableLiveData<List<Person>> ContactPersonsList;
+    private MutableLiveData<List<Person>> favouritePersonsList;
+    private MutableLiveData<List<Person>> deletedPersonsList;
     private MutableLiveData<Boolean> isDataAdded;
+    private MutableLiveData<Person> deleted;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -24,11 +29,26 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
 
-    public MutableLiveData<List<Person>> getPersonsList() {
-        if (personsList==null){
-            personsList=new MutableLiveData<>();
+    public MutableLiveData<List<Person>> getContactPersonsList() {
+        if (ContactPersonsList ==null){
+            ContactPersonsList =new MutableLiveData<>();
         }
-        return personsList;
+        return ContactPersonsList;
+    }
+
+
+    public MutableLiveData<List<Person>> getFavouritePersonsList() {
+        if (favouritePersonsList==null){
+            favouritePersonsList =new MutableLiveData<>();
+        }
+        return favouritePersonsList;
+    }
+
+    public MutableLiveData<List<Person>> getDeletedPersonsList() {
+        if (deletedPersonsList==null){
+            deletedPersonsList =new MutableLiveData<>();
+        }
+        return deletedPersonsList;
     }
 
     public MutableLiveData<Boolean> getIsDataAdded() {
@@ -38,24 +58,36 @@ public class MainActivityViewModel extends AndroidViewModel {
         return isDataAdded;
     }
 
+    public MutableLiveData<Person> getDeleted() {
+        if (deleted==null){
+            deleted=new MutableLiveData<Person>();
+        }
+        return deleted;
+    }
+
     public void fetchContactsFromDevice(){
         MainActivityRepository.fetchAllContactsFromDevice(application,getIsDataAdded());
     }
 
     public void getAllPersonsFromDatabase() {
-        MainActivityRepository.getAllPersonsFromDatabase(application,getPersonsList());
+        MainActivityRepository.getAllPersonsFromDatabase(application, getContactPersonsList());
     }
-    public void getFavouritePersonsFromDatabase() {
-        MainActivityRepository.getFavouritePersonsFromDatabase(application,getPersonsList());
+    public void getFavouritePersonsFromDatabase(String status) {
+        MainActivityRepository.getFavouriteOrDeletedPersonsFromDatabase(application, getFavouritePersonsList(),status);
+    }public void getDeletedPersonsFromDatabase(String status) {
+        MainActivityRepository.getFavouriteOrDeletedPersonsFromDatabase(application, getDeletedPersonsList(),status);
     }
 
     public void setPersonAsFavourite( Person person){
         person.setStatus(Constants.CONTACT_STATUS.FAVOURITE.getStatus());
-        MainActivityRepository.setPersonAsFavouriteOrDeleted(application,person);
+        MainActivityRepository.setPersonAsFavouriteOrDeleted(application,person,getContactPersonsList());
     }
     public void setPersonAsDeleted(Person person){
-        person.setStatus(Constants.CONTACT_STATUS.DELETED.getStatus());
-        MainActivityRepository.setPersonAsFavouriteOrDeleted(application,person);
+        getDeleted().setValue(person);
+    }
+
+    public void adapterItemClick(){
+        Log.e("MainActivityViewModel","item click");
     }
 }
 

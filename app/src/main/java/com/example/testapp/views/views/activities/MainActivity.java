@@ -14,6 +14,7 @@ import com.example.testapp.R;
 import com.example.testapp.databinding.ActivityMainBinding;
 import com.example.testapp.views.permissionutil.PermissionManager;
 import com.example.testapp.views.permissionutil.Permissions;
+import com.example.testapp.views.utils.Constants;
 import com.example.testapp.views.viewModels.MainActivityViewModel;
 import com.example.testapp.views.views.adapters.ViewPagerAdapter;
 import com.example.testapp.views.views.fragments.ContactFragment;
@@ -47,8 +48,16 @@ public class MainActivity extends AppCompatActivity implements PermissionManager
             mainActivityViewModel.fetchContactsFromDevice();
         }
 
-        setupViewPager();
+//        setupViewPager();
 
+        setUpTabs();
+
+    }
+
+    private void setUpTabs() {
+        activityMainBinding.tabLayout.addTab(activityMainBinding.tabLayout.newTab().setText(getString(R.string.contacts)),true);
+        activityMainBinding.tabLayout.addTab(activityMainBinding.tabLayout.newTab().setText(getString(R.string.favourites)));
+        activityMainBinding.tabLayout.addTab(activityMainBinding.tabLayout.newTab().setText(getString(R.string.deleted)));
 
     }
 

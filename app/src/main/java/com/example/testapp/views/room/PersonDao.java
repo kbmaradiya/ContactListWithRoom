@@ -17,14 +17,12 @@ public interface PersonDao {
     @Insert
     void insertPerson(List<Person> persons);
 
-
     @Update
     void updatePerson(Person persons);
 
-
-    @Query("SELECT * FROM " + Constants.TABLE_NAME)
-    Maybe<List<Person>> getAllPersons();
+    @Query("SELECT * FROM " + Constants.TABLE_NAME+" WHERE "+ Constants.STATUS+" IN (:fav,:contact)")
+    Maybe<List<Person>> getAllPersons(String fav,String contact);
 
     @Query("SELECT * FROM " + Constants.TABLE_NAME+" WHERE "+ Constants.STATUS+" = :status")
-    Maybe<List<Person>> getAllFavouritePersons(String status);
+    Maybe<List<Person>> getFavouriteOrDeletedPersons(String status);
 }

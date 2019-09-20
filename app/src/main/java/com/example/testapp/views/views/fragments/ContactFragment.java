@@ -1,5 +1,6 @@
 package com.example.testapp.views.views.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,11 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.testapp.R;
 import com.example.testapp.databinding.FragmentContactsBinding;
-import com.example.testapp.views.room.Person;
+import com.example.testapp.views.utils.CommonUtils;
+import com.example.testapp.views.utils.Constants;
 import com.example.testapp.views.views.activities.MainActivity;
 import com.example.testapp.views.views.adapters.ContactsAdapter;
-
-import java.util.ArrayList;
 
 public class ContactFragment extends Fragment {
 
@@ -32,6 +32,8 @@ public class ContactFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         fragmentContactsBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_contacts, container, false);
+
+        Log.e("ContactFragment","onCreateView");
         return fragmentContactsBinding.getRoot();
     }
 
@@ -42,18 +44,23 @@ public class ContactFragment extends Fragment {
 
         registerObserverForLiveData();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("ContactFragment","onResume");
+        MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
 
     }
 
-
-
     private void registerObserverForLiveData() {
 
-        MainActivity.mainActivityViewModel.getPersonsList().observe(this, personsList -> {
+        MainActivity.mainActivityViewModel.getContactPersonsList().observe(this, personsList -> {
 
-            Log.e("MainActivity", "size " + personsList.size());
+            Log.e("ContactFragment", "size " + personsList.size());
             if (contactsAdapter == null) {
-                contactsAdapter = new ContactsAdapter(getActivity(), personsList);
+                contactsAdapter = new ContactsAdapter(getActivity(), personsList,MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.CONTACT);
                 fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                 fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
@@ -66,6 +73,12 @@ public class ContactFragment extends Fragment {
             if (isDataAdded){
                 MainActivity.mainActivityViewModel.getAllPersonsFromDatabase();
             }
+        });
+
+
+        MainActivity.mainActivityViewModel.getDeleted().observe(this, person->{
+
+            CommonUtils.deleteAlertDialog(getContext(),person,MainActivity.mainActivityViewModel.getContactPersonsList());
         });
     }
 }

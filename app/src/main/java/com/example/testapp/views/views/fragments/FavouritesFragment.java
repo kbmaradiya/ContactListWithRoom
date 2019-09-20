@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.testapp.R;
 import com.example.testapp.databinding.FragmentContactsBinding;
+import com.example.testapp.views.utils.Constants;
 import com.example.testapp.views.views.activities.MainActivity;
 import com.example.testapp.views.views.adapters.ContactsAdapter;
 
@@ -29,6 +30,8 @@ public class FavouritesFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         fragmentContactsBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_contacts, container, false);
+        Log.e("FavouritesFragment","onCreateView");
+
         return fragmentContactsBinding.getRoot();
     }
 
@@ -43,14 +46,22 @@ public class FavouritesFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("FavouritesFragment","onResume");
+        MainActivity.mainActivityViewModel.getFavouritePersonsFromDatabase(Constants.CONTACT_STATUS.FAVOURITE.getStatus());
+
+    }
+
 
     private void registerObserverForLiveData() {
 
-        MainActivity.mainActivityViewModel.getPersonsList().observe(this, personsList -> {
+        MainActivity.mainActivityViewModel.getFavouritePersonsList().observe(this, personsList -> {
 
-            Log.e("MainActivity", "size " + personsList.size());
+            Log.e("FavouritesFragment", "size " + personsList.size());
             if (contactsAdapter == null) {
-                contactsAdapter = new ContactsAdapter(getActivity(), personsList);
+                contactsAdapter = new ContactsAdapter(getActivity(), personsList, MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.FAVOURITE);
                 fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                 fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
@@ -59,10 +70,6 @@ public class FavouritesFragment extends Fragment {
             }
         });
 
-        MainActivity.mainActivityViewModel.getIsDataAdded().observe(this, isDataAdded->{
-            if (isDataAdded){
-                MainActivity.mainActivityViewModel.getFavouritePersonsFromDatabase();
-            }
-        });
+
     }
 }
