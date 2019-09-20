@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements PermissionManager
             mainActivityViewModel.fetchContactsFromDevice();
         }
 
-//        setupViewPager();
+        setupViewPager();
 
-        setUpTabs();
+//        setUpTabs();
 
     }
 

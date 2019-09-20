@@ -15,10 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.testapp.R;
 import com.example.testapp.databinding.FragmentContactsBinding;
+import com.example.testapp.views.room.Person;
 import com.example.testapp.views.utils.CommonUtils;
 import com.example.testapp.views.utils.Constants;
 import com.example.testapp.views.views.activities.MainActivity;
 import com.example.testapp.views.views.adapters.ContactsAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactFragment extends Fragment {
 
@@ -43,6 +47,7 @@ public class ContactFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         registerObserverForLiveData();
+
 
     }
 
