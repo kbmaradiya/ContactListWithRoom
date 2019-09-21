@@ -1,6 +1,7 @@
 package com.example.testapp.views.views.adapters;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        Log.e("ContactFragment","ContactAdapter : "+position);
         holder.contactAdapterBinding.setPerson(personList.get(position));
 
         if (personList.get(position).getStatus().equals(Constants.CONTACT_STATUS.FAVOURITE.getStatus())){

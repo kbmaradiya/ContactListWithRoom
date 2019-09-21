@@ -15,7 +15,7 @@ import io.reactivex.Maybe;
 @Dao
 public interface PersonDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertPerson(List<Person> persons);
 
     @Update

@@ -1,5 +1,6 @@
 package com.example.testapp.views.views.adapters;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -18,6 +19,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
+
+
     @Override
     public Fragment getItem(int i) {
         return mFragmentList.get(i);
@@ -31,6 +34,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mFragmentTitleList.get(position);
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 
     public void addFragment(Fragment fragment, String title) {
