@@ -46,13 +46,18 @@ public class FavouritesFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("FavouritesFragment","onResume");
-        MainActivity.mainActivityViewModel.getFavouritePersonsFromDatabase(Constants.CONTACT_STATUS.FAVOURITE.getStatus());
 
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        Log.e("FavouritesFragment","setMenuVisibility : "+menuVisible);
+
+        if (menuVisible){
+            MainActivity.mainActivityViewModel.getFavouritePersonsFromDatabase(Constants.CONTACT_STATUS.FAVOURITE.getStatus());
+        }
     }
+
 
 
     private void registerObserverForLiveData() {

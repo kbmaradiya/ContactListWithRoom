@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.testapp.views.repositories.MainActivityRepository;
 import com.example.testapp.views.room.Person;
-import com.example.testapp.views.utils.CommonUtils;
 import com.example.testapp.views.utils.Constants;
 
 import java.util.List;
@@ -17,10 +16,9 @@ import java.util.List;
 public class MainActivityViewModel extends AndroidViewModel {
 
     private Application application;
-    private MutableLiveData<List<Person>> ContactPersonsList;
+    private MutableLiveData<List<Person>> contactPersonsList;
     private MutableLiveData<List<Person>> favouritePersonsList;
     private MutableLiveData<List<Person>> deletedPersonsList;
-    private MutableLiveData<Boolean> isDataAdded;
     private MutableLiveData<Person> deleted;
 
     public MainActivityViewModel(@NonNull Application application) {
@@ -30,10 +28,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
 
     public MutableLiveData<List<Person>> getContactPersonsList() {
-        if (ContactPersonsList ==null){
-            ContactPersonsList =new MutableLiveData<>();
+        if (contactPersonsList ==null){
+            contactPersonsList =new MutableLiveData<>();
         }
-        return ContactPersonsList;
+        return contactPersonsList;
     }
 
 
@@ -51,22 +49,11 @@ public class MainActivityViewModel extends AndroidViewModel {
         return deletedPersonsList;
     }
 
-    public MutableLiveData<Boolean> getIsDataAdded() {
-        if (isDataAdded==null){
-            isDataAdded=new MutableLiveData<>();
-        }
-        return isDataAdded;
-    }
-
     public MutableLiveData<Person> getDeleted() {
         if (deleted==null){
             deleted=new MutableLiveData<Person>();
         }
         return deleted;
-    }
-
-    public void fetchContactsFromDevice(){
-        MainActivityRepository.fetchAllContactsFromDevice(application,getIsDataAdded());
     }
 
     public void getAllPersonsFromDatabase() {
