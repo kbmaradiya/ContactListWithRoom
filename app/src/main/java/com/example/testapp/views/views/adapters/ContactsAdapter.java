@@ -6,18 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.testapp.R;
+import com.example.testapp.databinding.ContactAdapterBinding;
+import com.example.testapp.views.room.Person;
+import com.example.testapp.views.utils.CommonUtils;
+import com.example.testapp.views.utils.Constants;
+import com.example.testapp.views.viewModels.MainActivityViewModel;
+import com.example.testapp.views.views.activities.MainActivity;
+
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.testapp.R;
-import com.example.testapp.databinding.ContactAdapterBinding;
-import com.example.testapp.views.room.Person;
-import com.example.testapp.views.utils.Constants;
-import com.example.testapp.views.viewModels.MainActivityViewModel;
-
-import java.util.List;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 
@@ -54,6 +56,23 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         }else {
             holder.contactAdapterBinding.imgFavourite.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_favorite_border_black_24dp));
         }
+
+
+        holder.contactAdapterBinding.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommonUtils.deleteAlertDialog(activity, personList.get(position), MainActivity.mainActivityViewModel.getContactPersonsList());
+            }
+        });
+
+        holder.contactAdapterBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommonUtils.callOrMessage(activity,personList.get(position));
+            }
+        });
+
+
     }
 
     @Override
@@ -70,17 +89,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
             setFavAndDeleteVisisbility();
 
-            onClicks();
+
         }
 
-        private void onClicks() {
-            contactAdapterBinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
 
         private void setFavAndDeleteVisisbility() {
             switch (status) {

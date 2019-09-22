@@ -67,7 +67,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:src="@drawable/ic_favorite_border_black_24dp"
-            android:onClick="@{() -> mainActivityViewmodel.setPersonAsFavourite(person)}"/>
+            android:onClick="@{() -> mainActivityViewmodel.setPersonAsFavouriteOrNot(person)}"/>
 
         <ImageView
             android:id="@+id/imgDelete"
@@ -78,7 +78,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/imgFavourite"
             android:src="@drawable/ic_delete_black_24dp"
-            android:onClick="@{() -> mainActivityViewmodel.setPersonAsDeleted(person)}"/>
+            />
 
     </RelativeLayout>
 

@@ -6,17 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.example.testapp.R;
 import com.example.testapp.databinding.FragmentContactsBinding;
 import com.example.testapp.views.utils.Constants;
 import com.example.testapp.views.views.activities.MainActivity;
 import com.example.testapp.views.views.adapters.ContactsAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class FavouritesFragment extends Fragment {
 
@@ -65,14 +65,11 @@ public class FavouritesFragment extends Fragment {
         MainActivity.mainActivityViewModel.getFavouritePersonsList().observe(this, personsList -> {
 
             Log.e("FavouritesFragment", "size " + personsList.size());
-            if (contactsAdapter == null) {
+
                 contactsAdapter = new ContactsAdapter(getActivity(), personsList, MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.FAVOURITE);
                 fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                 fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
-            } else {
-                contactsAdapter.notifyDataSetChanged();
-            }
         });
 
 

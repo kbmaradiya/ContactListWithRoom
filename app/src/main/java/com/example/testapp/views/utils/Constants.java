@@ -2,11 +2,11 @@ package com.example.testapp.views.utils;
 
 import android.widget.ImageView;
 
-import androidx.databinding.BindingAdapter;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.testapp.R;
+
+import androidx.databinding.BindingAdapter;
 
 public class Constants {
 
@@ -44,7 +44,5 @@ public class Constants {
                 )
                 .into(view);
     }
-
-
 
 }

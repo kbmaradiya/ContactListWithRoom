@@ -6,17 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.example.testapp.R;
 import com.example.testapp.databinding.FragmentContactsBinding;
 import com.example.testapp.views.utils.Constants;
 import com.example.testapp.views.views.activities.MainActivity;
 import com.example.testapp.views.views.adapters.ContactsAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class DeletedFragment extends Fragment {
 
@@ -30,7 +30,7 @@ public class DeletedFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         fragmentContactsBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_contacts, container, false);
-        Log.e("DeletedFragment","onCreateView");
+        Log.e("DeletedFragment", "onCreateView");
 
         return fragmentContactsBinding.getRoot();
     }
@@ -48,8 +48,8 @@ public class DeletedFragment extends Fragment {
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
-        Log.e("DeletedFragment","setMenuVisibility : "+menuVisible);
-        if (menuVisible){
+
+        if (menuVisible) {
             MainActivity.mainActivityViewModel.getDeletedPersonsFromDatabase(Constants.CONTACT_STATUS.DELETED.getStatus());
         }
     }
@@ -58,15 +58,11 @@ public class DeletedFragment extends Fragment {
 
         MainActivity.mainActivityViewModel.getDeletedPersonsList().observe(this, personsList -> {
 
-            Log.e("DeletedFragment", "size " + personsList.size());
-            if (contactsAdapter == null) {
-                contactsAdapter = new ContactsAdapter(getActivity(), personsList, MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.DELETED);
-                fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            contactsAdapter = new ContactsAdapter(getActivity(), personsList, MainActivity.mainActivityViewModel, Constants.CONTACT_STATUS.DELETED);
+            fragmentContactsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
-            } else {
-                contactsAdapter.notifyDataSetChanged();
-            }
+            fragmentContactsBinding.recyclerView.setAdapter(contactsAdapter);
+
         });
 
 
